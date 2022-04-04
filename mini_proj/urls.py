@@ -11,4 +11,4 @@ app.add_url_rule("/login", methods=["POST"], view_func=login_view)
 app.add_url_rule("/home",methods=["GET"],view_func=home)
 
 #logout route
-app.add_url_rule("/logout",methods=["POST"],view_func=logout_view)
+app.add_url_rule("/logout",methods=["DELETE"],view_func=logout_view)
