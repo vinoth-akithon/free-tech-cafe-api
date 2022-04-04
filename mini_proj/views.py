@@ -4,8 +4,10 @@ from .models import *
 from flask_jwt_extended import create_access_token,create_refresh_token,jwt_required,get_jwt_identity,get_jwt
 
 
+def index():
+    return "<h1 style='color:green;margin:auto;width:80%;text-align:center;font-size:10vw'>Hello World</h1>"
+
 def register_view():
-   
     email = (request.form["email"]).lower()
     if not User.check_user(email):
         new_user = User(name=(request.form["name"]).capitalize(),
