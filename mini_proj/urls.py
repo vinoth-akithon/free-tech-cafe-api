@@ -5,10 +5,10 @@ from mini_proj.views import *
 app.add_url_rule("/", methods=["GET"], view_func=index)
 
 #register route
-app.add_url_rule("/register", methods=["POST"], view_func=register_view)
+app.add_url_rule("/register", methods=["POST","GET"], view_func=register_view)
 
 #login route
-app.add_url_rule("/login", methods=["POST"], view_func=login_view)
+app.add_url_rule("/login", methods=["POST","GET"], view_func=login_view)
 
 #home page route
 app.add_url_rule("/home",methods=["GET"],view_func=home)

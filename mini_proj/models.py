@@ -22,6 +22,7 @@ class TokenBlocklist(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+        db.session.close()
 
 def genearte_hash(password):
     return sha256.hash(password)
