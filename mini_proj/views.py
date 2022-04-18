@@ -16,12 +16,13 @@ token_endpoint = os.getenv("TOKEN_ENDPOINT")
 userinfo_endpoint = os.getenv("USERINFO_ENDPOINT")
 redirect_uri = os.getenv("REDIRECT_URI")
 
-logging.info(google_client_id)
-logging.info(google_client_secret)
-logging.info(authorization_endpoint)
-logging.info(token_endpoint)
-logging.info(userinfo_endpoint)
-logging.info(redirect_uri)
+logging.info("logging working properly")
+logging.debug(google_client_id)
+logging.debug(google_client_secret)
+logging.debug(authorization_endpoint)
+logging.debug(token_endpoint)
+logging.debug(userinfo_endpoint)
+logging.debug(redirect_uri)
 
 
 
