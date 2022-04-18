@@ -1,10 +1,13 @@
 from flask import jsonify, request,make_response,redirect
 import os,json,requests
+from dotenv import load_dotenv
 from mini_proj import app,jwt
 from .models import *
 from flask_jwt_extended import create_access_token,create_refresh_token,jwt_required,get_jwt_identity,get_jwt
 from oauthlib.oauth2 import WebApplicationClient
-
+import logging
+logging.basicConfig(level=logging.DEBUG)
+load_dotenv()
 # getting secret value from env
 google_client_id = os.getenv("GOOGLE_CLIENT_ID")
 google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
@@ -13,9 +16,19 @@ token_endpoint = os.getenv("TOKEN_ENDPOINT")
 userinfo_endpoint = os.getenv("USERINFO_ENDPOINT")
 redirect_uri = os.getenv("REDIRECT_URI")
 
+logging.info(google_client_id)
+logging.info(google_client_secret)
+logging.info(authorization_endpoint)
+logging.info(token_endpoint)
+logging.info(userinfo_endpoint)
+logging.info(redirect_uri)
+
+
+
 
 
 def index():
+    logging.info(google_client_id)
     return "<h1 style='color:green;margin:auto;width:80%;text-align:center;font-size:10vw'>Hello World</h1>"
 
 def register_view():
