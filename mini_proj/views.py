@@ -9,12 +9,13 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 load_dotenv()
 # getting secret value from env
-google_client_id = os.getenv("GOOGLE_CLIENT_ID")
-google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
-authorization_endpoint = os.getenv("AUTHORIZATION_ENDPOINT")
-token_endpoint = os.getenv("TOKEN_ENDPOINT")
-userinfo_endpoint = os.getenv("USERINFO_ENDPOINT")
-redirect_uri = os.getenv("REDIRECT_URI")
+google_client_id = "891120027637-eenuem9abguslv240n5df1eqsgni3qk4.apps.googleusercontent.com"
+google_client_secret = "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"
+authorization_endpoint = "https://accounts.google.com/o/oauth2/v2/auth"
+token_endpoint = "https://oauth2.googleapis.com/token"
+userinfo_endpoint = "https://openidconnect.googleapis.com/v1/userinfo"
+redirect_uri = "https://veeramvinoth.pythonanywhere.com/callback"
+frontend_url = "https://vinoth-kumar-m-1026.github.io/free_tech_cafe_ui"
 
 logging.info("logging working properly")
 logging.debug(google_client_id)
@@ -104,7 +105,7 @@ def callback():
         User(name=userinfo_response["given_name"],email=email).save_to_db()
     access_token = create_access_token(email)
     
-    return redirect(f"{os.getenv('FRONTEND_URL')}/dummy.html?access_token={access_token}")
+    return redirect(f"{frontend_url}/dummy.html?access_token={access_token}")
                             
 
 @jwt_required()
