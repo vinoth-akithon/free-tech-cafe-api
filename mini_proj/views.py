@@ -39,7 +39,7 @@ def register_view():
         email = (request.form["email"]).lower()
         if not User.check_user(email):
             google_secret = str(pyotp.random_base32())
-            google_uri = pyotp.totp.TOTP(google_secret).provisioning_uri(issuer_name="BONAI")
+            google_uri = pyotp.totp.TOTP(google_secret).provisioning_uri(email,issuer_name="BONAI")
             # qrcode_uri = f"https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl={google_uri}"
             qrcode_uri = google_uri
 
