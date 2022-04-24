@@ -6,6 +6,9 @@ from .models import *
 from flask_jwt_extended import create_access_token,create_refresh_token,jwt_required,get_jwt_identity,get_jwt
 from oauthlib.oauth2 import WebApplicationClient
 import logging
+import pyotp
+
+
 logging.basicConfig(level=logging.DEBUG)
 load_dotenv()
 # getting secret value from env
@@ -16,17 +19,6 @@ token_endpoint = "https://oauth2.googleapis.com/token"
 userinfo_endpoint = "https://openidconnect.googleapis.com/v1/userinfo"
 redirect_uri = "https://veeramvinoth.pythonanywhere.com/callback"
 frontend_url = "https://vinoth-kumar-m-1026.github.io/free_tech_cafe_ui"
-
-logging.info("logging working properly")
-logging.debug(google_client_id)
-logging.debug(google_client_secret)
-logging.debug(authorization_endpoint)
-logging.debug(token_endpoint)
-logging.debug(userinfo_endpoint)
-logging.debug(redirect_uri)
-
-
-
 
 
 def index():
@@ -46,11 +38,20 @@ def register_view():
     else:
         email = (request.form["email"]).lower()
         if not User.check_user(email):
+            google_secret = str(pyotp.random_base32())
+            google_uri = pyotp.totp.TOTP(google_secret).provisioning_uri(issuer_name="BONAI")
+            # qrcode_uri = f"https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl={google_uri}"
+            qrcode_uri = google_uri
+
             User(name=(request.form["name"]).capitalize(),
                         email=email,
+                        google_secret=google_secret,
+                        qrcode_uri=qrcode_uri,
                         password=genearte_hash(request.form["password"])).save_to_db()
             return make_response(jsonify({"message":"Thanks for registering with us!",
-                                "access_token": create_access_token(email)}),200)
+                                "google_secret": google_secret,
+                                "qrcode_uri":qrcode_uri
+                                }),200)
         else:
             return make_response({"message":"You are already registerd with us,Please login!"},400)
 
@@ -66,6 +67,7 @@ def login_view():
         return ({"url":request_uri})
 
     else:
+        print("pass")
         email = (request.form["email"]).lower()
         user = db.session.query(User).filter_by(email = email).first()
         if not user:
@@ -73,6 +75,11 @@ def login_view():
 
         if not verify_hash(request.form["password"],user.password):
             return make_response({"message": "Password is incorrect!"},400)
+
+        otp = request.form["otp"]
+        secret = user.google_secret
+        if not pyotp.TOTP(secret).verify(otp):
+            return make_response({"message": "authendication failed due to invalid otp!"},401)
         
         return make_response({"message":"login successful!",
                             "access_token": create_access_token(email)},200)
@@ -132,3 +139,23 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     return token is not None
 
 # db.session.close_all()
+
+# @app.route("/login")
+# def login():
+#     user_name = "vinoth"
+#     password = "12345"
+#     if request.form["user_name"] == "vinoth" and request.form["password"] == "12345":
+#         secret_key = pyotp.random_base32()
+#         return make_response({"secret_key": secret_key},200)
+#     else:
+#         return make_response({"message":"authendication failed"},401)
+
+
+# @app.route("/verify")
+# def verify():
+#     otp = request.form["otp"]
+#     secret = request.form["secret"]
+#     if pyotp.TOTP(secret).verify(otp):
+#         return make_response({"message": "authendication secceed!"},200)
+#     else:
+#         return make_response({"message": "otp verification failed."},401)

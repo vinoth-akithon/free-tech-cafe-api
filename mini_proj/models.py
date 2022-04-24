@@ -6,6 +6,8 @@ class User(db.Model):
     name = db.Column(db.String)
     email = db.Column(db.String,unique=True)
     password = db.Column(db.String)
+    google_secret = db.Column(db.String)
+    qrcode_uri = db.Column(db.String)
 
     def save_to_db(self):
         db.session.add(self)

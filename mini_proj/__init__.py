@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data_base.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "DWSFGWSFWBEFWHFUIU"
 db = SQLAlchemy(app)
